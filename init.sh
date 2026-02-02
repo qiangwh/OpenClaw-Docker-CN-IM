@@ -364,4 +364,30 @@ echo "Gateway 绑定: $OPENCLAW_GATEWAY_BIND"
 
 # 启动 OpenClaw Gateway（切换到 node 用户）
 echo "=== 启动 OpenClaw Gateway ==="
-exec gosu node env HOME=/home/node openclaw gateway --verbose
+
+# 定义清理函数
+cleanup() {
+    echo "=== 接收到停止信号,正在关闭服务 ==="
+    if [ -n "$GATEWAY_PID" ]; then
+        kill -TERM "$GATEWAY_PID" 2>/dev/null || true
+        wait "$GATEWAY_PID" 2>/dev/null || true
+    fi
+    echo "=== 服务已停止 ==="
+    exit 0
+}
+
+# 捕获终止信号
+trap cleanup SIGTERM SIGINT SIGQUIT
+
+# 在后台启动 OpenClaw Gateway 作为子进程
+gosu node env HOME=/home/node openclaw gateway --verbose &
+GATEWAY_PID=$!
+
+echo "=== OpenClaw Gateway 已启动 (PID: $GATEWAY_PID) ==="
+
+# 主进程等待子进程
+wait "$GATEWAY_PID"
+EXIT_CODE=$?
+
+echo "=== OpenClaw Gateway 已退出 (退出码: $EXIT_CODE) ==="
+exit $EXIT_CODE

@@ -5,14 +5,25 @@ FROM node:22-bookworm
 WORKDIR /app
 
 # 安装必要的系统依赖
-RUN apt-get update && apt-get install -y \
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
     bash \
-    curl \
-    git \
-    tini \
     ca-certificates \
+    chromium \
+    curl \
+    fonts-liberation \
+    fonts-noto-color-emoji \
+    git \
     gosu \
-    && rm -rf /var/lib/apt/lists/*
+    jq \
+    novnc \
+    python3 \
+    socat \
+    tini \
+    websockify \
+    x11vnc \
+    xvfb \
+  && rm -rf /var/lib/apt/lists/*
 
 # 更新 npm 到最新版本
 RUN npm install -g npm@latest

@@ -102,7 +102,7 @@
 
 ```bash
 cd openclaw
-docker build -t openclaw:local .
+docker build -t justlikemaki/openclaw-docker-cn-im:latest .
 ```
 
 ## 配置环境变量
@@ -304,7 +304,7 @@ docker-compose down
 2. 配置文件中的敏感信息（如 API 密钥、令牌）应妥善保管
 3. 首次运行时会自动创建必要的目录和配置文件
 4. 容器以 `node` 用户身份运行，确保挂载的卷有正确的权限
-5. 如果需要启用 Telegram，必须提供有效的 `TELEGRAM_BOT_TOKEN`
+5. 如果需要启用 Telegram，必须提供有效的 `TELEGRAM_BOT_TOKEN`，启用后需要执行 `openclaw pairing approve telegram {token}` 命令进行配对审批，并且需要重启 Docker 服务使配置生效
 6. 飞书配置默认已启用，可通过环境变量修改 App ID 和 Secret
 7. 如果需要启用钉钉，必须提供有效的 `DINGTALK_CLIENT_ID` 和 `DINGTALK_CLIENT_SECRET`，可选配置 `DINGTALK_ROBOT_CODE`、`DINGTALK_CORP_ID`、`DINGTALK_AGENT_ID`
 8. 如果需要启用 QQ 机器人，必须提供有效的 `QQBOT_APP_ID` 和 `QQBOT_CLIENT_SECRET`
